@@ -1,0 +1,23 @@
+{
+  "name": "editor",
+  "version": "0.0.0",
+  "description": "Editor",
+  "scripts": {
+    "tauri": "tauri",
+    "tauri dev": "tauri dev",
+    "tauri build": "tauri build",
+    "build": "vite build",
+    "dev": "vite dev"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "=5.0.12",
+    "vite-plugin-solid": "=2.8.2",
+    "typescript": "=5.3.3",
+    "@tauri-apps/cli": "=1.5.9"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "=1.5.3",
+    "solid-js": "=1.8.11"
+  }
+}
