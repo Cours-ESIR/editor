@@ -32,8 +32,12 @@
             cmake
             imv
 
-            npm
+            nodejs_21
             cargo-tauri
+
+            webkitgtk
+            libsoup.dev
+            openssl
           ];
           libraries = with pkgs; [
             openssl
