@@ -43,10 +43,8 @@ jobs:
         with:
           node-version: 'lts/*'
           
-      - name: install Rust stable
-        uses: dtolnay/rust-toolchain@nightly
-        with:
-          targets: ${{ matrix.target }}
+      - name: install toolchain
+        run: rustup toolchain install stable-${{ matrix.target }}
 
       - uses: actions/checkout@v3
         
