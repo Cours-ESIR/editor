@@ -44,7 +44,9 @@ jobs:
           node-version: 'lts/*'
           
       - name: install toolchain
-        run: rustup toolchain install stable-${{ matrix.target }}
+        run: |
+          rustup toolchain install stable-${{ matrix.target }}
+          rustup target add ${{ matrix.target }}
 
       - name: install dependencies (ubuntu only)
         if: matrix.os == 'ubuntu'
