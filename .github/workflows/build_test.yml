@@ -46,14 +46,15 @@ jobs:
       - name: install toolchain
         run: rustup toolchain install stable-${{ matrix.target }}
 
-      - uses: actions/checkout@v3
-        
       - name: install dependencies (ubuntu only)
         if: matrix.os == 'ubuntu'
         run: |
           sudo apt update
           sudo apt install -y libsoup-3.0-0 libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
-        
+
+      - name: checkout
+        uses: actions/checkout@v4
+      
       - name: installation modules nodejs
         run: npm install
 
