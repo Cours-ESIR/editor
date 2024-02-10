@@ -2,6 +2,7 @@ name: build test
 on:
   pull_request:
     branches: "**"
+  workflow_dispatch:
 
 jobs:
   build-tauri:
@@ -51,8 +52,6 @@ jobs:
             target: ${{ matrix.target }}
             components: rustfmt, clippy
 
-     
-        
       - name: install dependencies (ubuntu only)
         if: matrix.os == 'ubuntu'
         run: |
