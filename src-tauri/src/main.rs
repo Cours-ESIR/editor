@@ -15,3 +15,13 @@ fn main() {
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
+
+mod world;
+mod fonts;
+mod packages;
+
+/// Compile Typst Project
+#[tauri::command]
+fn compile_typst() {
+
+}
