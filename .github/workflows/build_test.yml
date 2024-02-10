@@ -43,7 +43,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
-      - uses: actions/checkout@v3
 
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
@@ -51,7 +50,9 @@ jobs:
             toolchain: stable
             target: ${{ matrix.target }}
             components: rustfmt, clippy
-
+          
+      - name: install toolchain
+        run: rustup toolchain install stable-${{ matrix.target }}
       - name: install dependencies (ubuntu only)
         if: matrix.os == 'ubuntu'
         run: |
