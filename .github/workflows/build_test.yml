@@ -42,13 +42,16 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 'lts/*'
-          
-      - name: install Rust stable
-        uses: dtolnay/rust-toolchain@nightly
-        with:
-          targets: ${{ matrix.target }}
-
       - uses: actions/checkout@v3
+
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+        with:
+            toolchain: stable
+            target: ${{ matrix.target }}
+            components: rustfmt, clippy
+
+     
         
       - name: install dependencies (ubuntu only)
         if: matrix.os == 'ubuntu'
@@ -61,6 +64,13 @@ jobs:
 
       - name: test build
         run: npm run build
+
+      - name: Run cargo check
+        uses: actions-rs/cargo@v1
+        with:
+          use-cross: true
+          command: check
+          args: --target ${{ matrix.target }}
 
       - name: test tauri build
         run: |

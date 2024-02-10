@@ -1660,6 +1660,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
+name = "hoot"
+version = "0.1.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df22a4d90f1b0e65fe3e0d6ee6a4608cc4d81f4b2eb3e670f44bb6bde711e452"
+dependencies = [
+ "httparse",
+ "log",
+]
+
+[[package]]
+name = "hootbin"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "354e60868e49ea1a39c44b9562ad207c4259dc6eabf9863bf3b0f058c55cfdb2"
+dependencies = [
+ "fastrand",
+ "hoot",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
+
+[[package]]
 name = "html5ever"
 version = "0.26.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1689,6 +1712,12 @@ name = "http-range"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "21dec9db110f5f872ed9699c3ecf50cf16f423502706ba5c72462e28d3157573"
+
+[[package]]
+name = "httparse"
+version = "1.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d897f394bad6a705d5f4104762e116a75639e470d80901eed05a860a95cb1904"
 
 [[package]]
 name = "humantime"
@@ -4274,7 +4303,7 @@ checksum = "42ff0bf0c66b8238c6f3b578df37d0b7848e55df8577b3f74f92a69acceeb825"
 [[package]]
 name = "typst"
 version = "0.10.0"
-source = "git+https://github.com/typst/typst#70b354e887cf735db070f766e4812357dddb8a40"
+source = "git+https://github.com/typst/typst#e2e8159bb2f8522343164342a469ad909c66028d"
 dependencies = [
  "az",
  "bitflags 2.4.2",
@@ -4329,7 +4358,7 @@ dependencies = [
 [[package]]
 name = "typst-macros"
 version = "0.10.0"
-source = "git+https://github.com/typst/typst#70b354e887cf735db070f766e4812357dddb8a40"
+source = "git+https://github.com/typst/typst#e2e8159bb2f8522343164342a469ad909c66028d"
 dependencies = [
  "heck 0.4.1",
  "proc-macro2",
@@ -4340,7 +4369,7 @@ dependencies = [
 [[package]]
 name = "typst-pdf"
 version = "0.10.0"
-source = "git+https://github.com/typst/typst#70b354e887cf735db070f766e4812357dddb8a40"
+source = "git+https://github.com/typst/typst#e2e8159bb2f8522343164342a469ad909c66028d"
 dependencies = [
  "base64 0.21.7",
  "bytemuck",
@@ -4364,7 +4393,7 @@ dependencies = [
 [[package]]
 name = "typst-render"
 version = "0.10.0"
-source = "git+https://github.com/typst/typst#70b354e887cf735db070f766e4812357dddb8a40"
+source = "git+https://github.com/typst/typst#e2e8159bb2f8522343164342a469ad909c66028d"
 dependencies = [
  "bytemuck",
  "comemo",
@@ -4384,7 +4413,7 @@ dependencies = [
 [[package]]
 name = "typst-svg"
 version = "0.10.0"
-source = "git+https://github.com/typst/typst#70b354e887cf735db070f766e4812357dddb8a40"
+source = "git+https://github.com/typst/typst#e2e8159bb2f8522343164342a469ad909c66028d"
 dependencies = [
  "base64 0.21.7",
  "comemo",
@@ -4401,7 +4430,7 @@ dependencies = [
 [[package]]
 name = "typst-syntax"
 version = "0.10.0"
-source = "git+https://github.com/typst/typst#70b354e887cf735db070f766e4812357dddb8a40"
+source = "git+https://github.com/typst/typst#e2e8159bb2f8522343164342a469ad909c66028d"
 dependencies = [
  "comemo",
  "ecow",
@@ -4417,7 +4446,7 @@ dependencies = [
 [[package]]
 name = "typst-timing"
 version = "0.10.0"
-source = "git+https://github.com/typst/typst#70b354e887cf735db070f766e4812357dddb8a40"
+source = "git+https://github.com/typst/typst#e2e8159bb2f8522343164342a469ad909c66028d"
 dependencies = [
  "parking_lot",
  "serde",
@@ -4521,12 +4550,13 @@ checksum = "e9df2af067a7953e9c3831320f35c1cc0600c30d44d9f7a12b01db1cd88d6b47"
 
 [[package]]
 name = "ureq"
-version = "2.9.1"
+version = "2.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f8cdd25c339e200129fe4de81451814e5228c9b771d57378817d6117cc2b3f97"
+checksum = "0b52731d03d6bb2fd18289d4028aee361d6c28d44977846793b994b13cdcc64d"
 dependencies = [
  "base64 0.21.7",
  "flate2",
+ "hootbin",
  "log",
  "native-tls",
  "once_cell",
