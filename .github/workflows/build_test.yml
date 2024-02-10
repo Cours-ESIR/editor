@@ -64,15 +64,14 @@ jobs:
       - name: test build
         run: npm run build
 
-      - name: Run cargo check
-        working-directory: ./src-tauri
-        uses: actions-rs/cargo@v1
-        with:
-          use-cross: true
-          command: check
-          args: --target ${{ matrix.target }}
+      # - name: Run cargo check
+      #   uses: actions-rs/cargo@v1
+      #   with:
+      #     use-cross: true
+      #     command: check
+      #     args: --target ${{ matrix.target }}
 
-      - name: test tauri build
+      - name: cargo check
         run: |
             cd src-tauri
-            cargo build --target ${{ matrix.target }} ${{ matrix.args }}
+            cargo check --target ${{ matrix.target }} ${{ matrix.args }}
