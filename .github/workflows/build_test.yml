@@ -65,8 +65,8 @@ jobs:
         run: npm run build
 
       - name: Run cargo check
-        uses: actions-rs/cargo@v1
         working-directory: ./src-tauri
+        uses: actions-rs/cargo@v1
         with:
           use-cross: true
           command: check
