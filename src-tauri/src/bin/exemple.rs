@@ -4,6 +4,7 @@ use clap::Parser;
 use typst::{eval::Tracer, foundations::Datetime, visualize::Color};
 use log::info;
 
+
 #[path = "../fonts.rs"]
 mod fonts;
 #[path = "../packages.rs"]
@@ -41,7 +42,7 @@ fn main() {
     {
         let ident = world.input();
         let out_path = temp_folder.join(filename).with_extension("pdf");
-        let buffer = typst_pdf::pdf(&document, ident.as_os_str().to_str(), now());
+        let buffer = typst_pdf::pdf(&document, typst::foundations::Smart::Custom(ident.as_os_str().to_str().unwrap()), now());
         fs::write(&out_path, buffer).unwrap();
         info!("Render PDF in {:?}", out_path);
     }

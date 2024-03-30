@@ -5,10 +5,10 @@ use std::{
 };
 
 use log::info;
-use typst::{
-    diag::{eco_format, PackageError, PackageResult},
-    syntax::PackageSpec,
-};
+use typst::diag::{eco_format, PackageError, PackageResult};
+
+use typst_syntax::package::PackageSpec;
+
 
 /// Make a package available in the on-disk cache.
 pub fn prepare_package(spec: &PackageSpec) -> PackageResult<PathBuf> {
