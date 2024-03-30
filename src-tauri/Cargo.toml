@@ -43,3 +43,6 @@ custom-protocol = [ "tauri/custom-protocol" ]
 
 [[bin]]
 name = "exemple"
+
+[[bin]]
+name = "project"
