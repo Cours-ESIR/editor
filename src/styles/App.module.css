@@ -1,0 +1,64 @@
+.app {
+  height: 100vh;
+  min-width: 100%;
+  color: aliceblue;
+}
+
+.toolbar {
+  background-color: #414040;
+  padding: 0.2em;
+}
+
+.sidebar {
+  background-color: #2b2828;
+  padding: 0.2em;
+}
+
+.modeline {
+  background-color: #474847;
+  padding: 0.2em;
+}
+
+.main {
+  box-sizing: border-box;
+  width: 100%;
+  overflow-y: auto;
+  background-color: #21252b;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px; 
+  height: calc(100%);
+}
+
+.editor {
+  grid-area: 1 / 1 / 2 / 2;
+  background-color: darkgoldenrod;
+}
+
+.preview {
+  grid-area: 1 / 2 / 2 / 3;
+  background-color: rgb(68, 67, 63);
+  min-width: 50%;
+}
+
+.col_flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.row_flex {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex_grow {
+  flex: 1 1 auto;
+}
+
+
+
+.link {
+  color: #b318f0;
+}

@@ -8,8 +8,18 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": ["vite/client"],
+    "types": [
+      "vite/client"
+    ],
     "noEmit": true,
-    "isolatedModules": true
-  }
+    "isolatedModules": true,
+    "baseUrl": "src",
+    "paths": {
+      // use @/ to access path related to the root of the project
+      "@/*": ["./*"]
+    }
+  },
+  "include": [
+    "src"
+  ]
 }

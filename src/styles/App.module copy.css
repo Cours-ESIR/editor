@@ -1,0 +1,55 @@
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 3.5em 2fr;
+  grid-template-rows: 2em 3fr 1.5em;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px; 
+}
+
+.toolbar {
+  grid-area: 1 / 2 / 2 / 3;
+  background-color: red;
+}
+
+.sidebar {
+  grid-area: 1 / 1 / 4 / 2;
+  background-color: darkred;
+}
+
+input { 
+  caret-color: green; 
+} 
+
+.modeline {
+  grid-area: 3 / 2 / 4 / 3;
+  background-color: lime;
+}
+
+.main {
+  grid-area: 2 / 2 / 3 / 3;
+  background-color: darkslategray;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px; 
+  height: calc(100%);
+}
+
+.editor {
+  grid-area: 1 / 1 / 2 / 2;
+  background-color: darkgoldenrod;
+  overflow-y: scroll;
+}
+
+.preview {
+  grid-area: 1 / 2 / 2 / 3;
+  background-color: darkkhaki;
+}
+
+
+
+.link {
+  color: #b318f0;
+}

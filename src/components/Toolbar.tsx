@@ -1,11 +1,12 @@
-import styles from '../App.module.css';
+import styles from '~/styles/App.module.css';
 import type { Component } from 'solid-js';
 
-const Toolbar: Component = () => {
-    return (
-        <div class={styles.toolbar} >
-        </div>
-    );
-  };
+const ToolBar: Component = () => {
+  return (
+    <div class={styles.toolbar} >
+      ToolBar
+    </div>
+  );
+};
 
-export default Toolbar
+export default ToolBar
