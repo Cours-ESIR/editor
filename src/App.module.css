@@ -20,11 +20,16 @@
 }
 
 .main {
-  grid-area: main;
-  background-color: darkslategray;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-y: auto;
+  background-color: #21252b;
   display: grid;
-  grid-template-areas:
-    "editor preview";
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px; 
+  height: calc(100%);
 }
 
 .link {
