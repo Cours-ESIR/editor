@@ -11,6 +11,36 @@
     "version": "0.0.0"
   },
   "tauri": {
+    "allowlist": {
+      "all": false,
+      "window": {
+        "create": true
+      },
+      "shell": {
+        "all": false,
+        "open": true
+      },
+      "dialog": {
+        "all": false,
+        "ask": false,
+        "confirm": false,
+        "message": false,
+        "open": true, 
+        "save": true 
+      },
+      "fs": {
+        "all": false,
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": false,
+        "createDir": false,
+        "removeDir": false,
+        "removeFile": false,
+        "renameFile": false,
+        "exists": false
+      }
+    },
     "bundle": {
       "shortDescription": "",
       "longDescription": "",
@@ -40,6 +70,9 @@
         "digestAlgorithm": "sha256",
         "timestampUrl": ""
       }
+    },
+    "security": {
+      "csp": null
     },
     "windows": [
       {
