@@ -1,12 +1,12 @@
 .app {
   height: 100vh;
   display: grid;
-  grid-template-columns: 0.1fr 2fr;
+  grid-template-columns: 1fr;
   grid-template-rows: 0.1fr 1.9fr;
   gap: 0px 0px;
   grid-template-areas:
-    "navbar toolbar"
-    "navbar main";
+    "toolbar"
+    "main";
 }
 
 .toolbar {
@@ -14,21 +14,13 @@
   background-color: red;
 }
 
-.sidebar {
-  grid-area: navbar;
-  background-color: darkred;
-}
-
 .main {
   box-sizing: border-box;
   width: 100%;
-  overflow-y: auto;
+  max-width: 100%;
+  overflow: hidden;
   background-color: #21252b;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 1fr;
-  grid-column-gap: 0px;
-  grid-row-gap: 0px; 
+  display: flex;
   height: calc(100%);
 }
 
