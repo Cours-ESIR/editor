@@ -3,7 +3,7 @@
 fn main() {
   tauri::Builder::default()
     // Register Command with Tauri App
-    .invoke_handler(tauri::generate_handler![return_string])
+    .invoke_handler(tauri::generate_handler![])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
