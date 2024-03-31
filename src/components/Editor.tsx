@@ -32,12 +32,11 @@ async function initEditor(div: HTMLDivElement, path: string | undefined, rendere
         value: texte()
     })
 
-
-    div.oninput = () => {
+    editor.onDidChangeModelContent((event) => {
         setTexte(editor.getValue())
         invoke("update_project", { content: texte() }).then()
         renderer()
-    }
+    })
 
 }
 
