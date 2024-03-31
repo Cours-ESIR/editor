@@ -5,6 +5,7 @@ use comemo::Prehashed;
 use typst::{
     diag::FileResult,
     foundations::{Bytes, Datetime},
+    model::Document,
     text::{Font, FontBook},
     Library, World,
 };
@@ -28,22 +29,15 @@ pub struct Projet {
     book: Prehashed<FontBook>,
 }
 
-impl Projet {
-    pub fn new() -> Self {
-        let content_main = "== Hello World";
-
-        // "Fichier" principale
+impl Default for Projet {
+    fn default() -> Self {
+        let mut searcher = FontSearcher::new();
+        let library = Library::builder().build();
+        searcher.search();
+        let mut files: HashMap<FileId, Fichier> = HashMap::new();
         let main_id = FileId::new(None, VirtualPath::new("Foo.typ"));
 
-        let library = Library::builder().build();
-        let mut searcher = FontSearcher::new();
-        searcher.search();
-
-        let mut files: HashMap<FileId, Fichier> = HashMap::new();
-
-        // Doit importer tout les dependense de main ici aussi. sinon crash.
-        files.insert(main_id, Fichier::from_content(main_id, content_main.as_bytes()));
-
+        files.insert(main_id, Fichier::from_content(main_id, "".as_bytes()));
         Self {
             main_id,
             files,
@@ -52,17 +46,22 @@ impl Projet {
             fonts: searcher.fonts,
         }
     }
+}
 
-    pub fn add_file(&mut self,id: FileId, content: &[u8]) {
+impl Projet {
+    pub fn add_file(&mut self, id: FileId, content: &[u8]) {
         self.files.insert(id, Fichier::from_content(id, content));
     }
 
-    pub fn update_file(&mut self, id:FileId, content: &[u8]) {
+    pub fn update_file(&mut self, id: FileId, content: &[u8]) {
         let c = self.files.get_mut(&id).unwrap(); // TODO better error handing
         c.update(content);
     }
 
-    pub fn update_main<'a, T>(&mut self, content: T) where T: AsRef<[u8]> {
+    pub fn update_main<'a, T>(&mut self, content: T)
+    where
+        T: AsRef<[u8]>,
+    {
         self.update_file(self.main_id, content.as_ref());
     }
 }
@@ -117,6 +116,11 @@ impl World for Projet {
     }
 }
 
+#[derive(Default)]
+pub struct ProjetCache {
+    pub document: Option<Document>,
+}
+
 struct Fichier {
     id: FileId,
     data: Bytes,
@@ -139,7 +143,7 @@ impl Fichier {
             _fingerprint: 0,
         }
     }
-    
+
     fn update(&mut self, content: &[u8]) {
         self.data = content.into();
     }
