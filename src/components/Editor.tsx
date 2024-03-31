@@ -10,8 +10,7 @@ import { invoke } from "@tauri-apps/api";
 
 
 async function initEditor(div: HTMLDivElement, path: string | undefined) {
-    invoke("compile", {content: "= Ourah ça fonctione"}).then();
-    let textvalue = ""
+    let textvalue = "= caca \n $1/2$"
 
     if (path) {
         let buff = (await fs.readBinaryFile(path))
@@ -27,6 +26,7 @@ async function initEditor(div: HTMLDivElement, path: string | undefined) {
         automaticLayout: true,
         value: textvalue
     })
+    invoke("update_project", { content: textvalue }).then();
 
 }
 

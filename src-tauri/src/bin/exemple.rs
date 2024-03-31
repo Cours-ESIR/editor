@@ -4,13 +4,6 @@ use log::info;
 use std::{env, fs, io, path::PathBuf};
 use typst::{eval::Tracer, foundations::Datetime, visualize::Color};
 
-#[path = "../fonts.rs"]
-mod fonts;
-#[path = "../packages.rs"]
-mod packages;
-#[path = "../world.rs"]
-mod world;
-
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
 struct Cli {
@@ -31,7 +24,7 @@ fn main() {
     let temp_folder = create_temp_folder().expect("Couln't create temp folder");
 
     info!("Creating typst World...");
-    let world = world::EditorWorld::new(file);
+    let world = editor::world::EditorWorld::new(file);
     let mut tracer = Tracer::new();
     info!("Compiling typst Project...");
     let document = typst::compile(&world, &mut tracer).unwrap();

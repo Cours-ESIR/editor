@@ -1,51 +1,58 @@
 #![cfg_attr(all(not(debug_assertions)), windows_subsystem = "windows")]
 
-use std::collections::HashMap;
+use std::sync::RwLock;
 
-use comemo::Prehashed;
-use fonts::FontSearcher;
-use log::info;
-use projet::Projet;
-use typst::{eval::Tracer, Library};
-use typst_syntax::{FileId, VirtualPath};
+use editor::projet::{Projet, ProjetCache};
+use log::{debug, info};
+use typst::eval::Tracer;
 
 fn main() {
-    env_logger::builder().filter_level(log::LevelFilter::Debug).init();
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Debug)
+        .init();
     tauri::Builder::default()
+        .manage(AppState::default())
         // Register Command with Tauri App
-        .invoke_handler(tauri::generate_handler![compile])
+        .invoke_handler(tauri::generate_handler![
+            update_project,
+            compile_project,
+            render_project
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
 
-mod fonts;
-mod projet;
-mod utils;
+#[derive(Default)]
+struct AppState {
+    projet: RwLock<Projet>,
+    cache: RwLock<ProjetCache>,
+}
 
 #[tauri::command]
-fn compile(content: String) {
-    // COmpile trés dirty pas beau vraiment.
-    info!("compiling...");
+fn update_project<'a>(content: String, state: tauri::State<'a, AppState>) {
+    info!("Update Project");
+    let projet = &mut state.projet.write().unwrap();
+    projet.update_main(content); // TODO check error
+}
 
-    let mut tracer = Tracer::new();
-    let temp_folder = utils::create_temp_folder().expect("Couln't create temp folder");
+#[tauri::command]
+fn compile_project(state: tauri::State<AppState>) {
+    info!("Compile Project");
+    let projet = state.projet.read().unwrap();
+    let document = typst::compile(&*projet, &mut Tracer::new()).unwrap(); // TODO check error
+    state.cache.write().unwrap().document = Some(document); // TODO check error
+}
 
-    let mut projet = Projet::new();
-    projet.update_main(content);
-
-    let document = typst::compile(&projet, &mut tracer).unwrap();
-
-    {
-        document.pages.iter().enumerate().for_each(|(i, page)| {
-            let out_path = temp_folder
-                .join(format!("{}_n{}", "main", i))
-                .with_extension("png");
-            let pixmap =
-                typst_render::render(&page.frame, 144.0 / 72.0, typst::visualize::Color::WHITE);
-            pixmap.save_png(&out_path).unwrap();
-
-            // TODO return directly the pixmap or svg
-            info!("Render PNG n°{} in {:?}", i, &out_path);
-        })
+#[tauri::command]
+fn render_project(page: usize, state: tauri::State<AppState>) -> String {
+    info!("Render Project, page {}", page);
+    let cache = state.cache.read().unwrap(); // TODO check error
+    dbg!(cache.document.as_ref().unwrap().pages.get(page));
+    if let Some(page) = cache.document.as_ref().and_then(|doc| doc.pages.get(page)) {
+        let svg = typst_svg::svg(&page.frame);
+        dbg!(&svg);
+        return svg;
     }
+    debug!("Failed to Render, page {}", page);
+    return "".to_string();
 }
