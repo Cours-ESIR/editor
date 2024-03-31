@@ -1,9 +1,8 @@
-use std::{env, fs, io, path::PathBuf};
 use chrono::{Datelike, Timelike};
 use clap::Parser;
-use typst::{eval::Tracer, foundations::Datetime, visualize::Color};
 use log::info;
-
+use std::{env, fs, io, path::PathBuf};
+use typst::{eval::Tracer, foundations::Datetime, visualize::Color};
 
 #[path = "../fonts.rs"]
 mod fonts;
@@ -42,7 +41,11 @@ fn main() {
     {
         let ident = world.input();
         let out_path = temp_folder.join(filename).with_extension("pdf");
-        let buffer = typst_pdf::pdf(&document, typst::foundations::Smart::Custom(ident.as_os_str().to_str().unwrap()), now());
+        let buffer = typst_pdf::pdf(
+            &document,
+            typst::foundations::Smart::Custom(ident.as_os_str().to_str().unwrap()),
+            now(),
+        );
         fs::write(&out_path, buffer).unwrap();
         info!("Render PDF in {:?}", out_path);
     }
