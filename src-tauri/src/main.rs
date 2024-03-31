@@ -39,20 +39,19 @@ fn update_project<'a>(content: String, state: tauri::State<'a, AppState>) {
 fn compile_project(state: tauri::State<AppState>) {
     info!("Compile Project");
     let projet = state.projet.read().unwrap();
-    let document = typst::compile(&*projet, &mut Tracer::new()).unwrap(); // TODO check error
-    state.cache.write().unwrap().document = Some(document); // TODO check error
+    let document = typst::compile(&*projet, &mut Tracer::new());
+    if let Ok(document) = document {
+        state.cache.write().unwrap().document = Some(document); // TODO check error
+    }  
 }
 
 #[tauri::command]
 fn render_project(page: usize, state: tauri::State<AppState>) -> String {
     info!("Render Project, page {}", page);
     let cache = state.cache.read().unwrap(); // TODO check error
-    dbg!(cache.document.as_ref().unwrap().pages.get(page));
     if let Some(page) = cache.document.as_ref().and_then(|doc| doc.pages.get(page)) {
         let svg = typst_svg::svg(&page.frame);
-        dbg!(&svg);
         return svg;
     }
-    debug!("Failed to Render, page {}", page);
     return "".to_string();
 }
