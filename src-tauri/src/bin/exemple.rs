@@ -1,4 +1,3 @@
-use chrono::{Datelike, Timelike};
 use clap::Parser;
 use log::info;
 use std::{env, fs, io, path::PathBuf};
@@ -21,7 +20,7 @@ fn main() {
 
     let file = &cli.file;
     let filename = file.file_stem().unwrap().to_str().unwrap();
-    let temp_folder = create_temp_folder().expect("Couln't create temp folder");
+    let temp_folder = editor::create_temp_folder().expect("Couln't create temp folder");
 
     info!("Creating typst World...");
     let world = editor::world::EditorWorld::new(file);
@@ -37,7 +36,7 @@ fn main() {
         let buffer = typst_pdf::pdf(
             &document,
             typst::foundations::Smart::Custom(ident.as_os_str().to_str().unwrap()),
-            now(),
+            editor::now(),
         );
         fs::write(&out_path, buffer).unwrap();
         info!("Render PDF in {:?}", out_path);
@@ -68,23 +67,4 @@ fn main() {
     }
 }
 
-fn now() -> Option<Datetime> {
-    let now = chrono::Local::now().naive_utc();
-    Datetime::from_ymd_hms(
-        now.year(),
-        now.month().try_into().ok()?,
-        now.day().try_into().ok()?,
-        now.hour().try_into().ok()?,
-        now.minute().try_into().ok()?,
-        now.second().try_into().ok()?,
-    )
-}
 
-fn create_temp_folder() -> io::Result<PathBuf> {
-    let temp_dir = env::temp_dir();
-    let out_dir = temp_dir.join("typst-editor/"); // Temp folder
-    if !out_dir.exists() {
-        let _ = fs::create_dir_all(&out_dir)?;
-    }
-    Ok(out_dir)
-}
