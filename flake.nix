@@ -38,10 +38,10 @@
             webkitgtk
             libsoup.dev
             openssl
+            corepack
           ];
           libraries = with pkgs; [
             openssl
-            glibc
           ];
           LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath libraries;
         };
