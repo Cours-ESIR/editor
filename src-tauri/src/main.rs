@@ -32,7 +32,7 @@ struct AppState {
 }
 
 #[tauri::command]
-fn update_project<'a>(content: String, state: tauri::State<'a, AppState>) -> () {
+fn update_project(content: String, state: tauri::State<AppState>) {
     info!("Update Project");
     let projet = &mut state.projet.write().unwrap();
     projet.update_main(content);
