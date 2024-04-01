@@ -3,8 +3,8 @@ mod packages;
 pub mod projet;
 pub mod world;
 
-use std::{env, fs, io, path::PathBuf};
 use chrono::{Datelike, Timelike};
+use std::{env, fmt, fs, io, path::PathBuf};
 use typst::foundations::Datetime;
 
 pub fn now() -> Option<Datetime> {
@@ -26,4 +26,30 @@ pub fn create_temp_folder() -> io::Result<PathBuf> {
         let _ = fs::create_dir_all(&out_dir)?;
     }
     Ok(out_dir)
+}
+
+
+pub enum EditorError {
+    CompileError,
+    CacheError,
+    RenderUnknownPageError,
+}
+
+impl fmt::Display for EditorError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            EditorError::CompileError => write!(f, "Compile Error"),
+            EditorError::CacheError => write!(f, "Cache Error"),
+            EditorError::RenderUnknownPageError => write!(f, "Page inconnu"),
+        }
+    }
+}
+
+impl serde::Serialize for EditorError {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.to_string().as_ref())
+    }
 }

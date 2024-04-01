@@ -2,8 +2,11 @@
 
 use std::sync::RwLock;
 
-use editor::projet::{Projet, ProjetCache};
-use log::{debug, info};
+use editor::{
+    projet::{Projet, ProjetCache},
+    EditorError,
+};
+use log::info;
 use typst::eval::Tracer;
 
 fn main() {
@@ -29,29 +32,32 @@ struct AppState {
 }
 
 #[tauri::command]
-fn update_project<'a>(content: String, state: tauri::State<'a, AppState>) {
+fn update_project<'a>(content: String, state: tauri::State<'a, AppState>) -> () {
     info!("Update Project");
     let projet = &mut state.projet.write().unwrap();
-    projet.update_main(content); // TODO check error
+    projet.update_main(content);
 }
 
 #[tauri::command]
-fn compile_project(state: tauri::State<AppState>) {
+fn compile_project(state: tauri::State<AppState>) -> Result<(), EditorError> {
     info!("Compile Project");
     let projet = state.projet.read().unwrap();
-    let document = typst::compile(&*projet, &mut Tracer::new());
-    if let Ok(document) = document {
-        state.cache.write().unwrap().document = Some(document); // TODO check error
-    }  
+    let document =
+        typst::compile(&*projet, &mut Tracer::new()).map_err(|_| EditorError::CompileError)?;
+    let mut cache = state.cache.write().map_err(|_| EditorError::CacheError)?;
+    cache.document = Some(document);
+    Ok(())
 }
 
 #[tauri::command]
-fn render_project(page: usize, state: tauri::State<AppState>) -> String {
+fn render_project(page: usize, state: tauri::State<AppState>) -> Result<String, EditorError> {
     info!("Render Project, page {}", page);
-    let cache = state.cache.read().unwrap(); // TODO check error
-    if let Some(page) = cache.document.as_ref().and_then(|doc| doc.pages.get(page)) {
-        let svg = typst_svg::svg(&page.frame);
-        return svg;
-    }
-    return "".to_string();
+    let cache = state.cache.read().map_err(|_| EditorError::CacheError)?;
+    let page = cache
+        .document
+        .as_ref()
+        .and_then(|doc| doc.pages.get(page))
+        .ok_or(EditorError::RenderUnknownPageError)?;
+    let svg = typst_svg::svg(&page.frame);
+    Ok(svg)
 }
