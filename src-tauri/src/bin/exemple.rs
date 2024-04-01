@@ -1,7 +1,7 @@
 use clap::Parser;
 use log::info;
-use std::{env, fs, io, path::PathBuf};
-use typst::{eval::Tracer, foundations::Datetime, visualize::Color};
+use std::{fs, path::PathBuf};
+use typst::{eval::Tracer, visualize::Color};
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
