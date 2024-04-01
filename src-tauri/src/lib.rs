@@ -23,7 +23,7 @@ pub fn create_temp_folder() -> io::Result<PathBuf> {
     let temp_dir = env::temp_dir();
     let out_dir = temp_dir.join("typst-editor/"); // Temp folder
     if !out_dir.exists() {
-        let _ = fs::create_dir_all(&out_dir)?;
+        fs::create_dir_all(&out_dir)?;
     }
     Ok(out_dir)
 }

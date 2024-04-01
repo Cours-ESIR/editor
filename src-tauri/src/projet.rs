@@ -58,7 +58,7 @@ impl Projet {
         c.update(content);
     }
 
-    pub fn update_main<'a, T>(&mut self, content: T)
+    pub fn update_main<T>(&mut self, content: T)
     where
         T: AsRef<[u8]>,
     {
