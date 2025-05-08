@@ -26,7 +26,7 @@ fn main() {
     let world = editor::world::EditorWorld::new(file);
     let mut tracer = Tracer::new();
     info!("Compiling typst Project...");
-    let document = typst::compile(&world, &mut tracer).unwrap();
+    let document = typst::compile(&world).unwrap();
     info!("Project Compiled...");
 
     // Output PDF
@@ -36,7 +36,6 @@ fn main() {
         let buffer = typst_pdf::pdf(
             &document,
             typst::foundations::Smart::Custom(ident.as_os_str().to_str().unwrap()),
-            editor::now(),
         );
         fs::write(&out_path, buffer).unwrap();
         info!("Render PDF in {:?}", out_path);
@@ -48,7 +47,7 @@ fn main() {
             let out_path = temp_folder
                 .join(format!("{}_n{}", filename, i))
                 .with_extension("png");
-            let pixmap = typst_render::render(&page.frame, 144.0 / 72.0, Color::WHITE);
+            let pixmap = typst_render::render(&page.frame, 144.0 / 72.0);
             pixmap.save_png(&out_path).unwrap();
             info!("Render PNG n°{} in {:?}", i, &out_path);
         })
@@ -66,5 +65,3 @@ fn main() {
         })
     }
 }
-
-

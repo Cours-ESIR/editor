@@ -1,7 +1,7 @@
 use std::fs;
 
-use log::info;
 use editor::projet::Projet;
+use log::info;
 use typst::eval::Tracer;
 
 fn main() {
@@ -12,18 +12,12 @@ fn main() {
 
     let projet = Projet::default();
     let mut tracer = Tracer::new();
-    let document = typst::compile(&projet, &mut tracer).unwrap();
+    let document = typst::compile(&projet).unwrap();
 
     {
         let out_path = temp_folder.join("Ourah").with_extension("pdf");
-        let buffer = typst_pdf::pdf(
-            &document,
-            typst::foundations::Smart::Auto,
-            editor::now(),
-        );
+        let buffer = typst_pdf::pdf(&document, typst::foundations::Smart::Auto);
         fs::write(&out_path, buffer).unwrap();
         info!("Render PDF in {:?}", out_path);
     }
 }
-
-

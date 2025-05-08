@@ -6,13 +6,9 @@ use std::{
     sync::Mutex,
 };
 
-use comemo::Prehashed;
+
 use typst::{
-    diag::{FileError, FileResult},
-    foundations::{Bytes, Datetime},
-    syntax::{FileId, Source, VirtualPath},
-    text::{Font, FontBook},
-    Library, World,
+    diag::{FileError, FileResult}, foundations::{Bytes, Datetime}, syntax::{FileId, Source, VirtualPath}, text::{Font, FontBook}, utils::{hash128, LazyHash}, Library, World
 };
 use typst_timing::timed;
 
@@ -25,9 +21,9 @@ pub struct EditorWorld {
     root: PathBuf,
     input: PathBuf,
     /// Typst's standard library.
-    library: Prehashed<Library>,
+    library: LazyHash<Library>,
     /// Metadata about discovered fonts.
-    book: Prehashed<FontBook>,
+    book: LazyHash<FontBook>,
     /// Locations of and storage for lazily loaded fonts.
     fonts: Vec<FontSlot>,
     /// Maps file ids to source files and buffers.
@@ -48,8 +44,8 @@ impl EditorWorld {
             main,
             root,
             input,
-            library: Prehashed::new(library),
-            book: Prehashed::new(searcher.book),
+            library: LazyHash::new(library),
+            book: LazyHash::new(searcher.book),
             fonts: searcher.fonts,
             slots: Mutex::new(HashMap::new()),
         }
@@ -73,16 +69,16 @@ impl EditorWorld {
 }
 
 impl World for EditorWorld {
-    fn library(&self) -> &Prehashed<Library> {
+    fn library(&self) -> &LazyHash<Library> {
         &self.library
     }
 
-    fn book(&self) -> &Prehashed<FontBook> {
+    fn book(&self) -> &LazyHash<FontBook> {
         &self.book
     }
 
-    fn main(&self) -> Source {
-        self.source(self.main).unwrap()
+    fn main(&self) -> FileId {
+        self.source(self.main).unwrap().id()
     }
 
     fn source(&self, id: FileId) -> FileResult<Source> {
@@ -154,7 +150,7 @@ impl FileSlot {
     /// Retrieve the file's bytes.
     fn file(&mut self, project_root: &Path) -> FileResult<Bytes> {
         self.file
-            .get_or_init(|| read(self.id, project_root), |data, _| Ok(data.into()))
+            .get_or_init(|| read(self.id, project_root), |data, _| Ok(Bytes::new(data)))
     }
 }
 
@@ -193,7 +189,7 @@ impl<T: Clone> SlotCell<T> {
 
         // Read and hash the file.
         let result = timed!("loading file", load());
-        let fingerprint = timed!("hashing file", typst::util::hash128(&result));
+        let fingerprint = timed!("hashing file", hash128(&result));
 
         // If the file contents didn't change, yield the old processed data.
         if mem::replace(&mut self.fingerprint, fingerprint) == fingerprint {
