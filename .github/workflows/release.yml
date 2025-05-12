@@ -18,22 +18,22 @@ jobs:
             target: x86_64-apple-darwin
             args: ""
           - os: macos
-            target: stable-aarch64-apple-darwin
+            target: aarch64-apple-darwin
             args: ""
 
           - os: ubuntu
-            target: stable-x86_64-unknown-linux-gnu
+            target: x86_64-unknown-linux-gnu
             args: ""
           - os: ubuntu
             target: aarch64-unknown-linux-gnu
             args: ""
 
           - os: windows
-            target: stable-x86_64-pc-windows-msvc
+            target: x86_64-pc-windows-msvc
             args: ""
 
           - os: windows
-            target: stable-aarch64-pc-windows-msvc
+            target: aarch64-pc-windows-msvc
             args: -b none
             
     runs-on: ${{ matrix.os }}-latest
@@ -42,7 +42,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
           
       - name: install toolchain
-        run: rustup toolchain install ${{ matrix.target }}
+        run: rustup toolchain install stable-${{ matrix.target }}
         
       - name: Cache
         id: cache
