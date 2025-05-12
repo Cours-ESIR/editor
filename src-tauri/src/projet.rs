@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use chrono::Datelike;
 use typst::{
-    diag::FileResult, foundations::{Bytes, Datetime}, Document, text::{Font, FontBook}, utils::LazyHash, Library, World
+    diag::FileResult, foundations::{Bytes, Datetime}, layout::PagedDocument, text::{Font, FontBook}, utils::LazyHash, Document, Library, World
 };
 use typst_syntax::{FileId, Source, VirtualPath};
 
@@ -113,7 +113,7 @@ impl World for Projet {
 
 #[derive(Default)]
 pub struct ProjetCache {
-    pub document: Option<Document>,
+    pub document: Option<PagedDocument>,
 }
 
 struct Fichier {

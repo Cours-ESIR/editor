@@ -57,6 +57,6 @@ fn render_project(page: usize, state: tauri::State<AppState>) -> Result<String, 
         .as_ref()
         .and_then(|doc| doc.pages.get(page))
         .ok_or(EditorError::RenderUnknownPageError)?;
-    let svg = typst_svg::svg(&page.frame);
+    let svg = typst_svg::svg(&page);
     Ok(svg)
 }
