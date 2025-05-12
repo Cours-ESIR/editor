@@ -27,8 +27,8 @@ impl FontSlot {
     pub fn get(&self) -> Option<Font> {
         self.font
             .get_or_init(|| {
-                let data = fs::read(&self.path).ok()?.into();
-                Font::new(data, self.index)
+                let data = fs::read(&self.path).ok()?;
+                Font::new(typst::foundations::Bytes::new(data), self.index)
             })
             .clone()
     }
@@ -75,7 +75,7 @@ impl FontSearcher {
 
     fn add_embedded(&mut self) {
         let mut process = |bytes: &'static [u8]| {
-            let buffer = typst::foundations::Bytes::from_static(bytes);
+            let buffer = typst::foundations::Bytes::new(bytes);
             for (i, font) in Font::iter(buffer).enumerate() {
                 self.book.push(font.info().clone());
                 self.fonts.push(FontSlot {

@@ -7,7 +7,6 @@ use editor::{
     EditorError,
 };
 use log::info;
-use typst::eval::Tracer;
 
 fn main() {
     env_logger::builder()
@@ -43,7 +42,7 @@ fn compile_project(state: tauri::State<AppState>) -> Result<(), EditorError> {
     info!("Compile Project");
     let projet = state.projet.read().unwrap();
     let document =
-        typst::compile(&*projet, &mut Tracer::new()).map_err(|_| EditorError::CompileError)?;
+        typst::compile(&*projet).output.map_err(|_| EditorError::CompileError)?;
     let mut cache = state.cache.write().map_err(|_| EditorError::CacheError)?;
     cache.document = Some(document);
     Ok(())
@@ -58,6 +57,6 @@ fn render_project(page: usize, state: tauri::State<AppState>) -> Result<String, 
         .as_ref()
         .and_then(|doc| doc.pages.get(page))
         .ok_or(EditorError::RenderUnknownPageError)?;
-    let svg = typst_svg::svg(&page.frame);
+    let svg = typst_svg::svg(&page);
     Ok(svg)
 }

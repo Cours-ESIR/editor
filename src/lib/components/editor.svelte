@@ -22,7 +22,7 @@
     }
 
     let editor = monaco.editor.create(div, {
-      theme: "vs-dark",
+      theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "vs-dark" : "vs",
       minimap: {
         enabled: false,
       },
@@ -41,6 +41,11 @@
 
   let div: HTMLDivElement;
   onMount(() => {
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        monaco.editor.setTheme(e.matches ? "vs-dark" : "vs");
+      });
     initEditor(div, path);
   });
 </script>

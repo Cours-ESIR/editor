@@ -1,13 +1,8 @@
 use std::collections::HashMap;
 
 use chrono::Datelike;
-use comemo::Prehashed;
 use typst::{
-    diag::FileResult,
-    foundations::{Bytes, Datetime},
-    model::Document,
-    text::{Font, FontBook},
-    Library, World,
+    diag::FileResult, foundations::{Bytes, Datetime}, layout::PagedDocument, text::{Font, FontBook}, utils::LazyHash, Document, Library, World
 };
 use typst_syntax::{FileId, Source, VirtualPath};
 
@@ -24,9 +19,9 @@ pub struct Projet {
     /// Lazy loaded font
     fonts: Vec<FontSlot>,
     /// Typst's standard library.
-    library: Prehashed<Library>,
+    library: LazyHash<Library>,
     /// Metadata about discovered fonts.
-    book: Prehashed<FontBook>,
+    book: LazyHash<FontBook>,
 }
 
 impl Default for Projet {
@@ -41,8 +36,8 @@ impl Default for Projet {
         Self {
             main_id,
             files,
-            library: Prehashed::new(library),
-            book: Prehashed::new(searcher.book),
+            library: LazyHash::new(library),
+            book: LazyHash::new(searcher.book),
             fonts: searcher.fonts,
         }
     }
@@ -67,17 +62,17 @@ impl Projet {
 }
 
 impl World for Projet {
-    fn library(&self) -> &Prehashed<Library> {
+    fn library(&self) -> &LazyHash<Library> {
         &self.library
     }
 
-    fn book(&self) -> &Prehashed<FontBook> {
+    fn book(&self) -> &LazyHash<FontBook> {
         &self.book
     }
 
-    fn main(&self) -> Source {
+    fn main(&self) -> FileId {
         let main = &self.files[&self.main_id];
-        main.source()
+        main.source().id()
     }
 
     fn source(&self, id: FileId) -> FileResult<Source> {
@@ -118,7 +113,7 @@ impl World for Projet {
 
 #[derive(Default)]
 pub struct ProjetCache {
-    pub document: Option<Document>,
+    pub document: Option<PagedDocument>,
 }
 
 struct Fichier {
@@ -139,13 +134,13 @@ impl Fichier {
     fn from_content(id: FileId, data: &[u8]) -> Fichier {
         Self {
             id,
-            data: data.into(),
+            data: Bytes::new(data.to_vec()),
             _fingerprint: 0,
         }
     }
 
     fn update(&mut self, content: &[u8]) {
-        self.data = content.into();
+        self.data = Bytes::new(content.to_vec());
     }
 }
 
