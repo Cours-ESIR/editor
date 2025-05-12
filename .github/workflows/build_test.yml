@@ -40,7 +40,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
           
       - name: install toolchain
-        run: rustup toolchain install stable-${{ matrix.target }}
+        run: rustup toolchain install stable-${{ matrix.target }} --force-non-host
         
       - name: add target
         run: rustup target add ${{ matrix.target }}
