@@ -38,7 +38,7 @@ jobs:
             args: ""
           - os: windows
             target: aarch64-pc-windows-msvc
-            toolchain: stable-aarch64-pc-windows-msvc
+            toolchain: stable-x86_64-pc-windows-msvc
             args: -b none
             
     runs-on: ${{ matrix.os }}-latest
