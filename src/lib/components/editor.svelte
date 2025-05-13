@@ -14,6 +14,14 @@
 
   let texte = $state("= demo \n $1/2$");
 
+  async function render(editor) {
+    texte = editor.getValue();
+    invoke("update_project", { content: texte }).then();
+    invoke("compile_project").then();
+    let data : string = await invoke("render_project", { page: 0 });
+    uri = `data:image/svg+xml;utf8,${encodeURIComponent(data)}`;
+  }
+
   async function initEditor(div: HTMLDivElement, path: string | undefined) {
     if (path) {
       let buff = await fs.readBinaryFile(path);
@@ -29,13 +37,9 @@
       automaticLayout: true,
       value: texte,
     });
-
+    render(editor)
     editor.onDidChangeModelContent(async (event) => {
-      texte = editor.getValue();
-      invoke("update_project", { content: texte }).then();
-      invoke("compile_project").then();
-      let data = await invoke("render_project", { page: 0 });
-      uri = `data:image/svg+xml;utf8,${encodeURIComponent(data)}`;
+      render(editor)
     });
   }
 

@@ -1,18 +1,41 @@
 <script lang="ts">
   import Editor from "$lib/components/editor.svelte";
-  import * as Resizable from "$lib/components/ui/resizable/index.js";
-  import { invoke } from "@tauri-apps/api";
-  import { ModeWatcher } from "mode-watcher";
+  import Tree from "$lib/components/tree.svelte";
+  import { EllipsisVertical } from "@steeze-ui/heroicons";
+  import { Icon } from "@steeze-ui/svelte-icon";
+  import { Pane, PaneGroup, PaneResizer } from "paneforge";
 
-  let data = "";
+  let data = $state("");
 </script>
 
-<Resizable.PaneGroup direction="horizontal" class="w-full h-dvh">
-  <Resizable.Pane defaultSize={50}>
-    <Editor path="" bind:uri={data}></Editor>
-  </Resizable.Pane>
-  <Resizable.Handle withHandle />
-  <Resizable.Pane defaultSize={50} class="overflow-auto h-dvh">
-      <img src={data} />
-  </Resizable.Pane>
-</Resizable.PaneGroup>
+<div class="h-dvh w-dvw p-2">
+  <PaneGroup direction="horizontal">
+    <Pane defaultSize={20} class="rounded-2xl bg-gray-900 p-4">
+      <Tree class="w-full"></Tree>
+    </Pane>
+    <PaneResizer
+      class="relative flex w-2 items-center justify-center bg-gray-950 text-[#c4c1bf]"
+    >
+      <div
+        class="z-10 flex h-6 w-4 items-center justify-center rounded-sm bg-accent-200"
+      >
+        <Icon src={EllipsisVertical} class="size-16 text-accent-950"></Icon>
+      </div>
+    </PaneResizer>
+    <Pane defaultSize={40} class="rounded-2xl bg-gray-900">
+      <Editor path="" bind:uri={data}></Editor>
+    </Pane>
+    <PaneResizer
+      class="relative flex w-2 items-center justify-center bg-gray-950 text-[#c4c1bf]"
+    >
+      <div
+        class="z-10 flex h-6 w-4 items-center justify-center rounded-sm bg-accent-200"
+      >
+        <Icon src={EllipsisVertical} class="size-16 text-accent-950"></Icon>
+      </div>
+    </PaneResizer>
+    <Pane defaultSize={40} class="rounded-2xl bg-gray-900">
+      <img src={data} alt="typst document" />
+    </Pane>
+  </PaneGroup>
+</div>
