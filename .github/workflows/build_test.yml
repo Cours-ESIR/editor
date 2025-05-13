@@ -15,25 +15,31 @@ jobs:
       matrix:
         include:
           - os: macos
-            target: x86_64-apple-darwin
+            target1: x86_64-apple-darwin
+            target2: aarch64-apple-darwin
             args: ""
           - os: macos
-            target: aarch64-apple-darwin
+            target1: aarch64-apple-darwin
+            target2: ""
             args: ""
 
           - os: ubuntu
-            target: x86_64-unknown-linux-gnu
+            target1: x86_64-unknown-linux-gnu
+            target2: ""
             args: ""
           - os: ubuntu
-            target: aarch64-unknown-linux-gnu
+            target1: aarch64-unknown-linux-gnu
+            target2: x86_64-unknown-linux-gnu
             args: ""
 
           - os: windows
-            target: x86_64-pc-windows-msvc
+            target1: x86_64-pc-windows-msvc
+            target2: ""
             args: ""
           - os: windows
-            target: aarch64-pc-windows-msvc
-            args: -b none
+            target1: aarch64-pc-windows-msvc
+            target2: x86_64-pc-windows-msvc
+            args: ""
             
     runs-on: ${{ matrix.os }}-latest
     steps:
@@ -56,7 +62,7 @@ jobs:
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: ${{ matrix.target }}
+          targets: ${{ matrix.target1 }},${{ matrix.target2 }}
 
       - name: test build
         run: bun run build
@@ -64,4 +70,4 @@ jobs:
       - name: test tauri build
         run: |
             cd src-tauri
-            cargo build --target ${{ matrix.target }} ${{ matrix.args }}
+            cargo build --target ${{ matrix.target1 }} ${{ matrix.args }}
