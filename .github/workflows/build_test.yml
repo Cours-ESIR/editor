@@ -53,8 +53,10 @@ jobs:
       - name: installation modules nodejs
         run: bun install
 
-      - name: add target
-        run: rustup target add ${{ matrix.target }}
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
 
       - name: test build
         run: bun run build
