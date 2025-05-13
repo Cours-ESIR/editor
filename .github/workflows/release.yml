@@ -40,9 +40,6 @@ jobs:
       - name: setup node
         uses: oven-sh/setup-bun@v2
 
-      - name: add target
-        run: rustup target add ${{ matrix.target }}
-
       - name: Cache
         id: cache
         uses: actions/cache@v3
@@ -62,6 +59,9 @@ jobs:
       
       - name: installation modules nodejs
         run: bun install
+
+      - name: add target
+        run: rustup target add ${{ matrix.target }}
 
       - uses: tauri-apps/tauri-action@v0
         env:
