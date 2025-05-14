@@ -88,7 +88,6 @@
     expandOnClick: true,
     items: data,
   });
-
 </script>
 
 {#snippet treeItemIcon(item: (typeof tree)["children"][0])}
@@ -127,14 +126,17 @@
         </div>
       </div>
       {#if item.children?.length && item.expanded}
-      <div class="relative" in:fly={{ y:-20,duration:200 }} out:fly={{ y:-20,duration:200 }}>
         <div
-          class="absolute bottom-2 top-2 w-px bg-gray-200 dark:bg-gray-700"
-          style="left: {0.5 + depth * 1}rem"
-        ></div>
-        {@render treeItems(item.children, depth + 1)}
-      </div>
-
+          class="relative"
+          in:fly={{ y: -20, duration: 200 }}
+          out:fly={{ y: -20, duration: 200 }}
+        >
+          <div
+            class="absolute bottom-2 top-2 w-px bg-gray-200 dark:bg-gray-700"
+            style="left: {0.5 + depth * 1}rem"
+          ></div>
+          {@render treeItems(item.children, depth + 1)}
+        </div>
       {/if}
     </div>
   {/each}

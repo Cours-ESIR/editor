@@ -1,45 +1,36 @@
 <script lang="ts">
   import * as monaco from "monaco-editor";
 
-  import { fs, invoke } from "@tauri-apps/api";
+  import { fs } from "@tauri-apps/api";
   import { onMount } from "svelte";
 
   let {
     path,
-    uri = $bindable(),
+    text = $bindable(),
   }: {
     path: string;
-    uri: string;
+    text: string;
   } = $props();
-
-  let texte = $state("= demo \n $1/2$");
-
-  async function render(editor) {
-    texte = editor.getValue();
-    invoke("update_project", { content: texte }).then();
-    invoke("compile_project").then();
-    let data : string = await invoke("render_project", { page: 0 });
-    uri = `data:image/svg+xml;utf8,${encodeURIComponent(data)}`;
-  }
 
   async function initEditor(div: HTMLDivElement, path: string | undefined) {
     if (path) {
       let buff = await fs.readBinaryFile(path);
       let buff2 = buff as unknown as number[];
-      texte = String.fromCharCode.apply(null, buff2);
+      text = String.fromCharCode.apply(null, buff2);
     }
 
     let editor = monaco.editor.create(div, {
-      theme: window.matchMedia("(prefers-color-scheme: dark)").matches ? "vs-dark" : "vs",
+      theme: window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "vs-dark"
+        : "vs",
       minimap: {
         enabled: false,
       },
       automaticLayout: true,
-      value: texte,
+      value: text,
     });
-    render(editor)
     editor.onDidChangeModelContent(async (event) => {
-      render(editor)
+      text = editor.getValue();
     });
   }
 
